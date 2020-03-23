@@ -1,6 +1,6 @@
 "use strict";
 
-const wordsList = ["hello", "thisIsAnArray", "  gr8 course\n", "WA1", "WA1-course", "Web Applications I", "Web Applications I "];
+const wordsList = ["hello", "thisIsAnArray", "  gr8 course", "WA1", "WA1-course", "Web Applications I\n", "Web Applications I "];
 //console.log(wordsList);
 
 function shortner(wordsList) {
@@ -12,4 +12,4 @@ function shortner(wordsList) {
 }
 
 shortner(wordsList);
-//console.log(wordsList);
+console.log(wordsList);

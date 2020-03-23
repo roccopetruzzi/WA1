@@ -1,14 +1,20 @@
 "use strict";
 
-const wordsList = ["hello", "thisIsAnArray", "  gr8 course\n", "WA1", "WA1-course", "Web Applications I", "Web Applications I "];
-console.log(wordsList);
+var readlineSync = require('readline-sync');
 
-for (let [i, w] of wordsList.entries()) {
-    w = w.trim();
-    const l = w.length;
-    (l < 2) ? wordsList[i] = '': wordsList[i] = w.substring(0, 2) + w.substring(l - 2);
-}
-console.log(wordsList);
+// Wait for user's response.
+var userName = readlineSync.question('May I have your name? ');
+console.log('Hi ' + userName + '!');
+
+// const wordsList = ["hello", "thisIsAnArray", "  gr8 course\n", "WA1", "WA1-course", "Web Applications I", "Web Applications I "];
+// console.log(wordsList);
+
+// for (let [i, w] of wordsList.entries()) {
+//     w = w.trim();
+//     const l = w.length;
+//     (l < 2) ? wordsList[i] = '': wordsList[i] = w.substring(0, 2) + w.substring(l - 2);
+// }
+// console.log(wordsList);
 
 // // Create acronyms for the courses
 
