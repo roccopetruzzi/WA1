@@ -1,10 +1,45 @@
 "use strict";
 
-var readlineSync = require('readline-sync');
+// ver 0.0
+// function printOptions() {
+//     console.log(`Hello! Welcome to todo_manager. You can:
+//     1. Insert a new task;
+//     2. Remove a task;
+//     3. Show all the tasks;
+//     4. Close the program;`);
+// }
+// ver 1.0
+const printOptions = () => console.log(
+    `Hello! Welcome to todo_manager. You can:
+    1. Insert a new task;
+    2. Remove a task;
+    3. Show all the tasks;
+    4. Close the program;`);
 
-// Wait for user's response.
-var userName = readlineSync.question('May I have your name? ');
-console.log('Hi ' + userName + '!');
+// ver 0.0
+// function getOption() {
+//     var readlineSync = require('readline-sync');
+//     var option = readlineSync.question('> ');
+//     return option
+// }
+// ver 1.0
+// const getOption = () => {
+//     var readlineSync = require('readline-sync');
+//     return readlineSync.question('> ');
+// };
+// ver 2.0
+const getOption = (readlineSync = require('readline-sync')) => readlineSync.question('> ');
+
+printOptions();
+console.log(getOption());
+
+//HELPER 
+// function Task(description, deadline = new Date(), urgent = false, private = true) {
+//     this.description = description;
+//     this.deadline = deadline;
+//     this.urgent = urgent;
+//     this.private = private;
+// }
 
 // const wordsList = ["hello", "thisIsAnArray", "  gr8 course\n", "WA1", "WA1-course", "Web Applications I", "Web Applications I "];
 // console.log(wordsList);
