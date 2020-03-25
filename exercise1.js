@@ -32,14 +32,26 @@ const getInput = (question) => {
     return readlineSync.question(question);
 };
 
-// FUNCTION TO GET Y/n ANSWER -> to modify...
-const yesOrNo = (readlineSync = require('readline-sync')) => readlineSync.question('Please anwser Y (Yes) or n (No). ').toUpperCase();
+// FUNCTION TO GET Y/n ANSWER
+// ver 0.0
+//const yesOrNo = (readlineSync = require('readline-sync')) => readlineSync.question('Please anwser Y (Yes) or n (No). ').toUpperCase();
+// ver 1.0
+const yesOrNo = (question) => {
+    var readlineSync = require('readline-sync');
+
+    let ans = getInput(question).toUpperCase();
+    while (ans.length > 1 || (ans != 'N' && ans != 'Y')) {
+        ans = getInput('Please anwser Y (Yes) or n (No). ').toUpperCase();
+    }
+    (ans == 'Y') ? ans = true: ans = false;
+    return ans;
+};
 
 function Task(desc, dead = new Date(), urg = false, pri = true) {
-    this.desc = desc;
-    this.dead = dead;
-    this.urg = urg;
-    this.pri = pri;
+    this.description = desc;
+    this.deadline = dead;
+    this.isUrgent = urg;
+    this.isPrivate = pri;
 }
 
 //  MAIN
@@ -51,25 +63,19 @@ while (option != 4) {
     switch (option) {
         case "1":
             let desc = getInput("Please, provide the task description: ");
+            let urg = yesOrNo("Is it urgent? [Y/n] ");
+            let pri = yesOrNo("Is it private? [Y/n] ");
+            let dead = new Date(Date.parse(getInput("When do you want to schedule it? ")));
 
-            let urg = getInput("Is it urgent? [Y/n] ").toUpperCase();
-            while (urg.length > 1 || (urg != 'N' && urg != 'Y')) {
-                urg = yesOrNo();
-            }
-            (urg == 'Y') ? urg = true: urg = false;
-            let pri = getInput("Is it private? [Y/n] ");
-            while (pri.length > 1 || (pri != 'N' && pri != 'Y')) {
-                pri = yesOrNo();
-            }
-
-            let dead = getInput("When do you want to schedule it? ");
             appointments.push(new Task(desc, dead, urg, pri));
+
+            console.log(`Ok then! Task added.`);
             break;
         case "2":
-            console.log("opt2");
+            console.log(`Task removed successfully.`);
             break;
         case "3":
-            console.log("opt3");
+            console.log("Here's the list of the tasks:");
             break;
         case "4":
             return 0;
