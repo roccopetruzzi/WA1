@@ -54,30 +54,84 @@ function Task(desc, dead = new Date(), urg = false, pri = true) {
     this.isPrivate = pri;
 }
 
+var Calendar = {
+    name: '',
+    appointments: new Map(),
+    addTask: function(taskToManage) {
+        if (this.appointments.has(taskToManage.description)) {
+            console.log(`Already present!`);
+        } else {
+            this.appointments.set(taskToManage.description, taskToManage);
+            // setTimeout()
+            console.log(`Task added!`);
+        }
+    },
+    removeTaskByDesc: function(taskDescription) {
+        if (this.appointments.has(taskDescription)) {
+            this.appointments.delete(taskDescription);
+            console.log(`Task deleted!`);
+        } else {
+            console.log(`Task not found!`);
+        }
+    },
+    removeTaskByDate: function(taskTimestamp) {
+        let dateDay = new Date(taskTimestamp).getDate();
+        for (let [d, a] of this.appointments.entries()) {
+            let appointmentTimestamp = a.deadline.getTime();
+            let appointmentDay = new Date(appointmentTimestamp).getDate();
+            let diff = Math.abs(appointmentTimestamp - taskTimestamp);
+            //if they are the same dom and their diff (timestamp) is less than 24H
+            if (dateDay == appointmentDay && diff <= (60 * 60 * 24 * 1000)) {
+                this.appointments.delete(d);
+            }
+        }
+    },
+    printAllTask: function() {
+        console.log(`Here's the list of the tasks of ${this.name}'s calendar: `);
+        const output = [];
+        for (let [d, a] of this.appointments.entries())
+            output.push(d); // output.push(`${d}`);
+        output.sort();
+        console.log(output);
+    }
+}
+
 //  MAIN
-const appointments = [];
 let option = '';
+var cal = Object.create(Calendar);
+cal.name = "Rocco";
 while (option != 4) {
     printOptions();
     option = getInput('> ');
     switch (option) {
         case "1":
-            let desc = getInput("Please, provide the task description: ");
+            let desc = getInput("Please, provide the task description: "); //.toUpperCase();
             let urg = yesOrNo("Is it urgent? [Y/n] ");
             let pri = yesOrNo("Is it private? [Y/n] ");
             let dead = new Date(Date.parse(getInput("When do you want to schedule it? ")));
-
-            appointments.push(new Task(desc, dead, urg, pri));
-
-            console.log(`Ok then! Task added.`);
+            cal.addTask(new Task(desc, dead, urg, pri));
             break;
         case "2":
-            console.log(`Task removed successfully.`);
+            let ans = getInput("Do you want to delete it by Deadline (A) or Description (B)? ").toUpperCase();
+            switch (ans) {
+                case "A":
+                    let dateTimestamp = Date.parse(getInput("Please, provide the task deadline: "));
+                    cal.removeTaskByDate(dateTimestamp);
+                    break;
+                case "B":
+                    let taskDescription = getInput("Please, provide the task description: "); //.toUpperCase();
+                    cal.removeTaskByDesc(taskDescription);
+                    break;
+                default:
+                    console.log("Sorry, you entered an invalid option. Please try again.");
+                    break;
+            }
             break;
         case "3":
-            console.log("Here's the list of the tasks:");
+            cal.printAllTask();
             break;
         case "4":
+            console.log("Goodbye...!");
             return 0;
             break;
         default:
@@ -85,44 +139,3 @@ while (option != 4) {
             break;
     }
 }
-
-//HELPER 
-
-// const wordsList = ["hello", "thisIsAnArray", "  gr8 course\n", "WA1", "WA1-course", "Web Applications I", "Web Applications I "];
-// console.log(wordsList);
-
-// for (let [i, w] of wordsList.entries()) {
-//     w = w.trim();
-//     const l = w.length;
-//     (l < 2) ? wordsList[i] = '': wordsList[i] = w.substring(0, 2) + w.substring(l - 2);
-// }
-// console.log(wordsList);
-
-// // Create acronyms for the courses
-
-// const acronyms = [];
-
-// for (const c of courses) {
-//     const words = c.split(' ');
-//     let acronym = '';
-//     for (const w of words)
-//         acronym += w[0].toUpperCase();
-
-//     acronyms.push(acronym);
-// }
-
-// const output = [];
-// for (let [i, a] of acronyms.entries()) {
-//     // output.push(a + ' - ' + courses[i]) ;
-//     output.push(`${a} - ${courses[i]}`);
-// }
-
-// output.sort();
-// console.log(output);
-
-// // console.log(courselist) ;
-// console.log(courses);
-// console.log(acronyms);
-
-
-// console.log(words);
