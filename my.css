@@ -1,0 +1,41 @@
+.btn-add-task {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
+
+.btn-add {
+    border-radius: 100%;
+    width: 3em;
+    height: 3em;
+    padding: 0px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.aside {
+    background-color: #F8F9FA;
+}
+
+.aside .list-group {
+    padding: 15px;
+}
+
+.aside .list-group-item.active {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.aside .list-group-item {
+    background-color: #F8F9FA;
+}
+
+.badge {
+    margin-left: 15px;
+}
+
+.deadline p {
+    text-align: right;
+    margin-bottom: 0px;
+}
