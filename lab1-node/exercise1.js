@@ -24,9 +24,9 @@ const getInput = (question) => {
 const yesOrNo = (question) => {
     var readlineSync = require('readline-sync');
 
-    let ans = getInput(question).toUpperCase();
-    while (ans.length > 1 || (ans != 'N' && ans != 'Y')) {
-        ans = getInput('Please anwser Y (Yes) or n (No). ').toUpperCase();
+    let ans = getInput(question).trim().toUpperCase();
+    while (ans != 'N' && ans != 'Y') {
+        ans = getInput('Please anwser Y (Yes) or n (No). ').trim().toUpperCase();
     }
     (ans == 'Y') ? ans = true: ans = false;
     return ans;
@@ -65,16 +65,22 @@ var Calendar = {
             console.log(`Already present!`);
         } else {
             this.appointments.set(taskToManage.description, taskToManage);
-            // setTimeout()
+            //set self-destruction timer
+            let timer = new Date();
+            let now = timer.getTime();
+            let deadline = Date.parse(taskToManage.deadline);
+            timer = 0;
+            if (Number(deadline) > Number(now)) timer = (deadline - now);
+            setTimeout(() => { this.removeTaskByDesc(taskToManage.description); }, timer);
             console.log(`Task added!`);
         }
     },
     removeTaskByDesc: function(taskDescription) {
         if (this.appointments.has(taskDescription)) {
             this.appointments.delete(taskDescription);
-            console.log(`Task deleted!`);
+            console.log(`Task '${ taskDescription }' deleted!`);
         } else {
-            console.log(`Task not found!`);
+            console.log(`Task '${ taskDescription }' not found!`);
         }
     },
     removeTaskByDate: function(taskTimestamp) {
@@ -93,7 +99,7 @@ var Calendar = {
         console.log(`Here's the list of the tasks of ${this.name}'s calendar: `);
         const output = [];
         for (let [d, a] of this.appointments.entries())
-            output.push(d); // output.push(`${d}`);
+            output.push(d);
         output.sort();
         console.log(output);
     }
@@ -101,10 +107,14 @@ var Calendar = {
 
 /********************* MAIN *********************/
 
-var cal = Object.create(Calendar);
-var men = Object.create(Menu);
+const menu = setInterval(() => { main() }, 500);
+
+let cal = Object.create(Calendar);
+let men = Object.create(Menu);
 cal.name = "Personal";
-while (men.option != 4) {
+
+function main() {
+    // while (men.option != 4) {
     men.printOptions();
     men.askForInput();
     switch (Number(men.option)) {
@@ -136,24 +146,12 @@ while (men.option != 4) {
             break;
         case 4:
             console.log("Goodbye...!");
+            clearInterval(menu);
             return 0;
             break;
         default:
             console.log("Sorry, you entered an invalid option. Please try again.");
             break;
     }
+    // }
 }
-
-/*
-TESTING AREA...
-    setInterval(this.askForInput, 1000);
-    setOption: function(val) {
-        this.option = val;
-    },
-    hasValidOption: function() {
-        (this.option <= this.possibleOptions && this.option > 0) ? true: false;
-    },
-    const sayHello = () => { console.log("Hello!"); }
-
-    setTimeout(sayHello, 1000);
-    */
