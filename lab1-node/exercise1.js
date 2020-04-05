@@ -35,7 +35,7 @@ const yesOrNo = (question) => {
 /********************* OBJECTS *********************/
 
 // TASK CONSTRUCTOR
-function Task(desc, dead = new Date(), urg = false, pri = true) {
+function Task(desc, dead, urg = false, pri = true) {
     this.description = desc;
     this.deadline = dead;
     this.isUrgent = urg;
@@ -68,9 +68,9 @@ var Calendar = {
             //set self-destruction timer
             let timer = new Date();
             let now = timer.getTime();
-            let deadline = Date.parse(taskToManage.deadline);
-            timer = 0;
+            let deadline = taskToManage.deadline;
             if (Number(deadline) > Number(now)) timer = (deadline - now);
+            else timer = 0;
             setTimeout(() => { this.removeTaskByDesc(taskToManage.description); }, timer);
             console.log(`Task added!`);
         }
@@ -86,12 +86,13 @@ var Calendar = {
     removeTaskByDate: function(taskTimestamp) {
         let dateDay = new Date(taskTimestamp).getDate();
         for (let [d, a] of this.appointments.entries()) {
-            let appointmentTimestamp = a.deadline.getTime();
+            let appointmentTimestamp = a.deadline;
             let appointmentDay = new Date(appointmentTimestamp).getDate();
             let diff = Math.abs(appointmentTimestamp - taskTimestamp);
             //if they are the same dom and their diff (timestamp) is less than 24H
             if (dateDay == appointmentDay && diff <= (60 * 60 * 24 * 1000)) {
                 this.appointments.delete(d);
+                console.log(`Task '${a.description}' deleted!`);
             }
         }
     },
@@ -122,15 +123,15 @@ function main() {
             let desc = getInput("Please, provide the task description: "); //.toUpperCase();
             let urg = yesOrNo("Is it urgent? [Y/n] ");
             let pri = yesOrNo("Is it private? [Y/n] ");
-            let dead = new Date(Date.parse(getInput("When do you want to schedule it? ")));
+            let dead = Date.parse(getInput("When do you want to schedule it? "));
             cal.addTask(new Task(desc, dead, urg, pri));
             break;
         case 2:
             let ans = getInput("Do you want to delete it by Deadline (A) or Description (B)? ").toUpperCase();
             switch (ans) {
                 case "A":
-                    let dateTimestamp = Date.parse(getInput("Please, provide the task deadline: "));
-                    cal.removeTaskByDate(dateTimestamp);
+                    let taskDeadline = Date.parse(getInput("Please, provide the task deadline: "));
+                    cal.removeTaskByDate(taskDeadline);
                     break;
                 case "B":
                     let taskDescription = getInput("Please, provide the task description: "); //.toUpperCase();
