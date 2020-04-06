@@ -57,3 +57,7 @@
 .custom-checkbox .custom-control-input.important:focus~.custom-control-label::before {
     box-shadow: 0 0 0 0.2rem rgb(255, 148, 148);
 }
+
+.expired p {
+    color: red;
+}
